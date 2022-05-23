@@ -40,7 +40,16 @@ namespace HW_10_5_WPF_BASICTBOT
         public void Start(string token, string logFileName, string usersMessagesFileName,MainWindow mWindow)
         {
             if (BotRunFlag) return;
-            FileInfo fileInfo = new FileInfo(token);
+            FileInfo fileInfo;
+            try {
+                fileInfo = new FileInfo(token);
+            }
+            catch (System.NotSupportedException)
+            {
+                Log($"NotSupportedException {token}");
+                return;
+            }
+            
             if (fileInfo.Exists)
             {
                 this.token = File.ReadAllText(token);
@@ -66,6 +75,8 @@ namespace HW_10_5_WPF_BASICTBOT
         {
             if (!BotRunFlag) return;
             BotRunFlag = false;
+            //thread.Join(5000);
+            //thread.Abort();
             Log($"BOT STOP {DateTime.Now}");
         }
 
@@ -148,6 +159,24 @@ namespace HW_10_5_WPF_BASICTBOT
 
         private void Log(string msg)
         {
+            FileInfo fileInfo;
+            try
+            {
+                fileInfo = new FileInfo(logFileName);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(msg);
+                Debug.WriteLine($"ERROR: {e.Message} in LOG!!! {logFileName} LOG No RECORD IN FILE!!!");
+                return;
+            }
+
+            if (!fileInfo.Exists)
+            {
+                FileStream stream = File.Create(logFileName);
+                stream.Close();
+            }
+
             Debug.WriteLine(msg);
             File.AppendAllText(logFileName, $"{msg}\n");
         }

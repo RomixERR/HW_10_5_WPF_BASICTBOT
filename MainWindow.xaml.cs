@@ -1,6 +1,8 @@
-﻿using System;
+﻿using HW_10_5_WPF_BASICTBOT.Properties;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,15 +36,18 @@ namespace HW_10_5_WPF_BASICTBOT
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             PropWindow propWindow = new PropWindow();
+
+            //Debug.WriteLine(Settings.Default["tokenTB"].ToString());
+
             switch ((sender as MenuItem).Name)
             {
                 case "props":
                     propWindow.Show();
                     break;
                 case "start":
-                    bot.Start(token: @"E:\C#\SKILLBOXC#\HW9\tokenTestBot.txt",
-                        logFileName: "LogFileBot.txt",
-                        usersMessagesFileName: "000",
+                    bot.Start(token: Settings.Default["tokenTB"].ToString() ,
+                        logFileName: Settings.Default["logFileNameTB"].ToString(),
+                        usersMessagesFileName: Settings.Default["usersMessagesFileNameTB"].ToString(),
                         mWindow: this
                         );
                     break;
