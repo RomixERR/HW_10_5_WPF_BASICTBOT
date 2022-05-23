@@ -19,7 +19,15 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Menu x:Name="menu" Grid.ColumnSpan="2"/>
+        <Menu x:Name="menu" Grid.ColumnSpan="2">
+            <MenuItem Header="Меню">
+                <MenuItem Header="Настройки" x:Name="props" Click="MenuItem_Click"/>
+                <MenuItem Header="Запуск бота" x:Name="start" Click="MenuItem_Click"/>
+                <MenuItem Header="Остановка бота" x:Name="stop" Click="MenuItem_Click"/>
+                <Separator/>
+                <MenuItem Header="Выход" x:Name="exit" Click="MenuItem_Click"/>
+            </MenuItem>
+        </Menu>
 
     </Grid>
 

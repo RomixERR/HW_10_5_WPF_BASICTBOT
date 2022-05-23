@@ -31,24 +31,27 @@ namespace HW_10_5_WPF_BASICTBOT
         }
 
 
-        private void StartBtnClick(object sender, RoutedEventArgs e)
-        {
-            bot.Start(token: @"E:\C#\SKILLBOXC#\HW9\tokenTestBot.txt",
-                logFileName: "LogFileBot.txt",
-                usersMessagesFileName:  "000",
-                mWindow: this
-                );
-        }
-
-        private void StopBtnClick(object sender, RoutedEventArgs e)
-        {
-            bot.Stop();
-        }
-
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             PropWindow propWindow = new PropWindow();
-            propWindow.Show();
+            switch ((sender as MenuItem).Name)
+            {
+                case "props":
+                    propWindow.Show();
+                    break;
+                case "start":
+                    bot.Start(token: @"E:\C#\SKILLBOXC#\HW9\tokenTestBot.txt",
+                        logFileName: "LogFileBot.txt",
+                        usersMessagesFileName: "000",
+                        mWindow: this
+                        );
+                    break;
+                case "stop":
+                    bot.Stop();
+                    break;
+                case "exit":
+                    break;
+            }
         }
     }
 }
