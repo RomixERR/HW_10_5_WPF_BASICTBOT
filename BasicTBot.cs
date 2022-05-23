@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
@@ -107,8 +106,6 @@ namespace HW_10_5_WPF_BASICTBOT
             if (!BotRunFlag) return;
             BotRunFlag = false;
             client.Dispose();
-            //thread.Join(5000);
-            //thread.Abort();
             Log($"BOT STOP {DateTime.Now}");
         }
 
@@ -134,7 +131,6 @@ namespace HW_10_5_WPF_BASICTBOT
 
                 foreach (JToken msg in msgs)
                 {
-                    //string sendingMsg = "";
                     long userId;
                     string first_name;
                     string text;
@@ -183,12 +179,7 @@ namespace HW_10_5_WPF_BASICTBOT
                        dateTime = DateTime.Now
                    })
                     );
-
                     SaveAppendFileMessage(userMessages.Last(), usersMessagesFileName);
-                    //sendingMsg = Otvet(text);
-                    //SendMessage(sendingMsg, chatId);
-                    //Log($"MSG ADD /// Count: {window.userMessages.Count}, UserName: {window.userMessages.Last().UserName}, Message: {window.userMessages.Last().Message} ");
-
                 }
                 Thread.Sleep(3000);
             }
@@ -264,7 +255,6 @@ namespace HW_10_5_WPF_BASICTBOT
             if ((bool)JObject.Parse(a)["ok"])
             {
                 Log("Сообщение доставлено");
-                //Brush b = new SolidColorBrush(Color.FromRgb(255, 0, 0));
                 userMessages.Add(new UserMessage
                 {
                     ChatId = 0,
