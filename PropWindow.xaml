@@ -1,12 +1,12 @@
-﻿<Window x:Class="HW_10_5_WPF_BASICTBOT.MainWindow"
+﻿<Window x:Class="HW_10_5_WPF_BASICTBOT.PropWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HW_10_5_WPF_BASICTBOT"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Настройки" Height="450" Width="800">
     <Grid>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="296,232,0,0" VerticalAlignment="Top"/>
+        
     </Grid>
 </Window>

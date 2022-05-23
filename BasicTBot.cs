@@ -14,11 +14,12 @@ namespace HW_10_5_WPF_BASICTBOT
     internal class BasicTBot
     {
         private string token;
+        private string logFileName;
+        private string usersMessagesFileName;
         //h t t p s ://api.telegram.org/bot/{token}/METOD_NAME?argument1=value1&argument2=value2
         private string preRequest;
         private long update_id;
         private WebClient client;
-        private string logFileName;
         private bool BotRunFlag;
         private Thread thread;
         private MainWindow window;
