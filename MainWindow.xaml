@@ -8,26 +8,51 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="23*"/>
-            <RowDefinition Height="122*"/>
-            <RowDefinition Height="72*"/>
-            <RowDefinition Height="72*"/>
-            <RowDefinition Height="72*"/>
-            <RowDefinition Height="72*"/>
+            <RowDefinition Height="23.002"/>
+            <RowDefinition Height="228*" MinHeight="228"/>
+            <RowDefinition Height="55*"/>
+            <RowDefinition Height="43*"/>
+            <RowDefinition Height="51*"/>
+            <RowDefinition Height="34.029"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="393*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="400*"/>
         </Grid.ColumnDefinitions>
-        <Menu x:Name="menu" Grid.ColumnSpan="2">
+        <Menu x:Name="menu" Grid.ColumnSpan="3">
             <MenuItem Header="Меню">
                 <MenuItem Header="Настройки" x:Name="props" Click="MenuItem_Click"/>
                 <MenuItem Header="Запуск бота" x:Name="start" Click="MenuItem_Click"/>
                 <MenuItem Header="Остановка бота" x:Name="stop" Click="MenuItem_Click"/>
+                <MenuItem Header="Тест" x:Name="test" Click="MenuItem_Click"/>
                 <Separator/>
                 <MenuItem Header="Выход" x:Name="exit" Click="MenuItem_Click"/>
             </MenuItem>
         </Menu>
+        <ListBox x:Name="listBox" Grid.RowSpan="5"  Margin="0,23,5,7" Grid.ColumnSpan="2">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="350" MaxWidth="350" MinWidth="350">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Path=dateTime, FallbackValue=24:24:24 200000}" Margin="5,5,0,0" FontSize="11" Foreground="#FF9C8888" />
+                        <TextBlock Grid.Row="1" Text="{Binding Path=UserName, FallbackValue=UserName}" Margin="3" FontSize="20" FontWeight="Bold" FontStyle="Normal" Foreground="#FF916464"/>
+                        <TextBlock Grid.Row="2" Text="{Binding Path=Message, FallbackValue=MessageMessage}" TextWrapping="Wrap"  Margin="5"  FontSize="14"/>
+                        <Border Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1" CornerRadius="10,5,20,5"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBlock x:Name="textBlock" Margin="10,5,10,5" Grid.Row="5" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="TextBlock"/>
+        <GroupBox Grid.Column="2" Header="{Binding ElementName=listBox, Path=SelectedItem.UserName, FallbackValue=User Name, StringFormat=СООБЩЕНИЕ ОТ {0}}" Margin="0,23,0,0" Grid.RowSpan="2">
+            <ScrollViewer>
+                <TextBlock Text="{Binding ElementName=listBox, Path=SelectedItem.Message, FallbackValue=MessageMessage}" TextWrapping="Wrap"  Margin="5"  FontSize="14"/>
+            </ScrollViewer>
+        </GroupBox>
 
     </Grid>
 

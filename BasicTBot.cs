@@ -142,12 +142,15 @@ namespace HW_10_5_WPF_BASICTBOT
                         continue;
                     }
 
-                    window.userMessages.Add(new UserMessage() {
-                        ChatId = chatId,
-                        Message = text,
-                        UserName = first_name,
-                        dateTime = DateTime.Now
-                    });
+                    window.Dispatcher.Invoke(() =>
+                    window.userMessages.Add(new UserMessage()
+                   {
+                       ChatId = chatId,
+                       Message = text,
+                       UserName = first_name,
+                       dateTime = DateTime.Now
+                   })
+                    );
                     //sendingMsg = Otvet(text);
                     //SendMessage(sendingMsg, chatId);
                     //Log($"MSG ADD /// Count: {window.userMessages.Count}, UserName: {window.userMessages.Last().UserName}, Message: {window.userMessages.Last().Message} ");
