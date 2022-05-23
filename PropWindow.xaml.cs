@@ -23,5 +23,12 @@ namespace HW_10_5_WPF_BASICTBOT
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
     }
 }

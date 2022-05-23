@@ -28,8 +28,18 @@ namespace HW_10_5_WPF_BASICTBOT
         /// </summary>
         /// <param name="token">Принемает как строку апи-токен, так и путь к файлу с токеном</param>
         /// <param name="logFileName">Путь или просто имя к лог-файлу</param>
-        public BasicTBot(string token, string logFileName)
+        public BasicTBot()
         {
+
+            BotRunFlag = false;
+        }
+        /// <summary>
+        /// запуск бота
+        /// </summary>
+        /// <param name="usersMessagesFileName">Путь или просто имя к Json файлу с сообщениями</param>
+        public void Start(string token, string logFileName, string usersMessagesFileName,MainWindow mWindow)
+        {
+            if (BotRunFlag) return;
             FileInfo fileInfo = new FileInfo(token);
             if (fileInfo.Exists)
             {
@@ -42,15 +52,6 @@ namespace HW_10_5_WPF_BASICTBOT
             preRequest = $@"https://api.telegram.org/bot{this.token}/"; //далее METOD_NAME
             update_id = 0;
             this.logFileName = logFileName;
-            BotRunFlag = false;
-        }
-        /// <summary>
-        /// запуск бота
-        /// </summary>
-        /// <param name="usersMessagesFileName">Путь или просто имя к Json файлу с сообщениями</param>
-        public void Start(string usersMessagesFileName,MainWindow mWindow)
-        {
-            if (BotRunFlag) return;
             BotRunFlag = true;
             client = new WebClient() { Encoding = Encoding.UTF8 };
             window = mWindow;
