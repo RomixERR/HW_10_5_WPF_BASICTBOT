@@ -13,6 +13,6 @@ namespace HW_10_5_WPF_BASICTBOT
         public string Message    { get; set; }
         public long ChatId       { get; set; }
         public DateTime dateTime { get; set; }
-        public Brush brush       { get; set; }
+        public SolidColorBrush brush { get; set; } = Brushes.Black;
     }
 }

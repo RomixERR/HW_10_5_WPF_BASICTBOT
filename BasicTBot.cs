@@ -12,6 +12,7 @@ using System.Diagnostics;
 using HW_10_5_WPF_BASICTBOT.Properties;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 
 namespace HW_10_5_WPF_BASICTBOT
 {
@@ -263,12 +264,14 @@ namespace HW_10_5_WPF_BASICTBOT
             if ((bool)JObject.Parse(a)["ok"])
             {
                 Log("Сообщение доставлено");
+                //Brush b = new SolidColorBrush(Color.FromRgb(255, 0, 0));
                 userMessages.Add(new UserMessage
                 {
                     ChatId = 0,
                     Message = msg,
                     UserName = "BOT",
-                    dateTime = DateTime.Now
+                    dateTime = DateTime.Now,
+                    brush = Brushes.SlateBlue
                 });
                 SaveAppendFileMessage(userMessages.Last(), usersMessagesFileName);
             }

@@ -43,7 +43,7 @@
                         <TextBlock Text="{Binding Path=dateTime, FallbackValue=24:24:24 200000}" Margin="5,5,0,0" FontSize="11" Foreground="#FF9C8888" />
                         <TextBlock Grid.Row="1" Text="{Binding Path=UserName, FallbackValue=UserName}" Margin="3" FontSize="20" FontWeight="Bold" FontStyle="Normal" Foreground="#FF916464"/>
                         <TextBlock Grid.Row="2" Text="{Binding Path=Message, FallbackValue=MessageMessage}" TextWrapping="Wrap"  Margin="5"  FontSize="14" MaxHeight="100"/>
-                        <Border Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1" CornerRadius="10,5,20,5"/>
+                        <Border Grid.Row="1" Grid.RowSpan="2" BorderBrush="{Binding Path=brush, FallbackValue=Black}"  BorderThickness="2" CornerRadius="10,5,20,5"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
