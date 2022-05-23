@@ -4,23 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HW_10_5_WPF_BASICTBOT"
+        xmlns:p="clr-namespace:HW_10_5_WPF_BASICTBOT.Properties"
         mc:Ignorable="d"
         Title="Настройки" Height="160" Width="700" MinWidth="700" MinHeight="160">
 
     <StackPanel Orientation="Vertical" Margin="4">
         <StackPanel Orientation="Horizontal" Margin="3">
             <TextBlock Text="Токен в виде текста или путь к файлу:" Margin="3"  MinWidth="220"/>
-            <TextBox x:Name="tokenTB" Text="(Токен вида 5512345678:AAnfgdasc023sdcz2004535345252542420)" Margin="3" MinWidth="370" Foreground="BlueViolet"/>
+            <TextBox x:Name="tokenTB" Text="{Binding Source={x:Static p:Settings.Default}, Path=tokenTB, Mode=TwoWay}" Margin="3" MinWidth="370" Foreground="BlueViolet"/>
             <Button x:Name="tokenB" Content="Open file" Click="Button_Click"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="3">
             <TextBlock Text="Путь к файлу техических логов:" Margin="3"  MinWidth="220"/>
-            <TextBox x:Name="logFileNameTB" Text=""  Margin="3" MinWidth="370" Foreground="BlueViolet" />
+            <TextBox x:Name="logFileNameTB" Text="{Binding Source={x:Static p:Settings.Default}, Path=logFileNameTB, Mode=TwoWay}"  Margin="3" MinWidth="370" Foreground="BlueViolet" />
             <Button x:Name="logFileNameB" Content="Open file" Click="Button_Click"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="3">
             <TextBlock Text="Путь к файлу списка сообщений:" Margin="3"  MinWidth="220"/>
-            <TextBox x:Name="usersMessagesFileNameTB" Text=""  Margin="3" MinWidth="370" Foreground="BlueViolet" />
+            <TextBox x:Name="usersMessagesFileNameTB" Text="{Binding Source={x:Static p:Settings.Default}, Path=usersMessagesFileNameTB, Mode=TwoWay}"  Margin="3" MinWidth="370" Foreground="BlueViolet" />
             <Button x:Name="usersMessagesFileNameB" Content="Open file" Click="Button_Click"/>
         </StackPanel>
         <Button x:Name="saveB" Content="Сохранить"  Click="Button_Click"/>

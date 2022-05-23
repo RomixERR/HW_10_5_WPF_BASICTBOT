@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HW_10_5_WPF_BASICTBOT.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,11 @@ namespace HW_10_5_WPF_BASICTBOT
 
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            Settings.Default.Save();
+            base.OnClosed(e);
+        }
 
     }
 }
