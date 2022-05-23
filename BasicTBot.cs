@@ -1,43 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 using System.Diagnostics;
+using HW_10_5_WPF_BASICTBOT.Properties;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace HW_10_5_WPF_BASICTBOT
 {
-    internal class BasicTBot
+    public class BasicTBot : INotifyPropertyChanged
     {
         private string token;
         private string logFileName;
-        private string usersMessagesFileName;
+        public string usersMessagesFileName;
         //h t t p s ://api.telegram.org/bot/{token}/METOD_NAME?argument1=value1&argument2=value2
+        public ObservableCollection<UserMessage> userMessages = new ObservableCollection<UserMessage>();
         private string preRequest;
         private long update_id;
         private WebClient client;
         private bool BotRunFlag;
         private Thread thread;
         private MainWindow window;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private string _msgsLog;
+        public string msgsLog
+        {
+            get { return _msgsLog; }
+            set
+            {
+                _msgsLog += value + "\n";
+                OnPropertyChanged();
+            }
+        }
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
         /// <summary>
         /// Конструктор.
         /// </summary>
         /// <param name="token">Принемает как строку апи-токен, так и путь к файлу с токеном</param>
         /// <param name="logFileName">Путь или просто имя к лог-файлу</param>
-        public BasicTBot()
+        public BasicTBot(string usersMessagesFileName)
         {
 
             BotRunFlag = false;
+            this.usersMessagesFileName = usersMessagesFileName;
+            Settings.Default.SettingChanging += Default_SettingChanging;
         }
+
+        private void Default_SettingChanging(object sender, System.Configuration.SettingChangingEventArgs e)
+        {
+            usersMessagesFileName = Settings.Default["usersMessagesFileNameTB"].ToString();
+        }
+
         /// <summary>
         /// запуск бота
         /// </summary>
         /// <param name="usersMessagesFileName">Путь или просто имя к Json файлу с сообщениями</param>
-        public void Start(string token, string logFileName, string usersMessagesFileName,MainWindow mWindow)
+        public void Start(string token, string logFileName, MainWindow mWindow)
         {
             if (BotRunFlag) return;
             FileInfo fileInfo;
@@ -75,6 +105,7 @@ namespace HW_10_5_WPF_BASICTBOT
         {
             if (!BotRunFlag) return;
             BotRunFlag = false;
+            client.Dispose();
             //thread.Join(5000);
             //thread.Abort();
             Log($"BOT STOP {DateTime.Now}");
@@ -143,7 +174,7 @@ namespace HW_10_5_WPF_BASICTBOT
                     }
 
                     window.Dispatcher.Invoke(() =>
-                    window.userMessages.Add(new UserMessage()
+                    userMessages.Add(new UserMessage()
                    {
                        ChatId = chatId,
                        Message = text,
@@ -151,6 +182,8 @@ namespace HW_10_5_WPF_BASICTBOT
                        dateTime = DateTime.Now
                    })
                     );
+
+                    SaveAppendFileMessage(userMessages.Last(), usersMessagesFileName);
                     //sendingMsg = Otvet(text);
                     //SendMessage(sendingMsg, chatId);
                     //Log($"MSG ADD /// Count: {window.userMessages.Count}, UserName: {window.userMessages.Last().UserName}, Message: {window.userMessages.Last().Message} ");
@@ -159,6 +192,37 @@ namespace HW_10_5_WPF_BASICTBOT
                 Thread.Sleep(3000);
             }
         }
+        private void SaveAppendFileMessage(UserMessage userMessage,string fileName)
+        {
+            StreamWriter streamWriter = new StreamWriter(fileName, true, Encoding.UTF8);
+            streamWriter.WriteLine( JsonConvert.SerializeObject(userMessage));
+            streamWriter.Close();
+        }
+
+
+        public ObservableCollection<UserMessage> LoadFileMessage(string fileName)
+        {
+            if (!File.Exists(fileName)) return null;
+            StreamReader streamReader = new StreamReader(fileName);
+            string s;
+            ObservableCollection<UserMessage> userMessages = new ObservableCollection<UserMessage>();
+            while (!String.IsNullOrEmpty(s = streamReader.ReadLine()))
+            {
+                try
+                {
+
+                    userMessages.Add((UserMessage)JsonConvert.DeserializeObject(s, typeof(UserMessage)));
+                }
+                catch (Exception e)
+                {
+                    Log($"LoadFileMessage ERROR: {e.Message}");
+                    userMessages = null;
+                }
+            }
+            streamReader.Close();
+            return userMessages;
+        }
+
 
         private void Log(string msg)
         {
@@ -169,6 +233,7 @@ namespace HW_10_5_WPF_BASICTBOT
             }
             catch (Exception e)
             {
+                msgsLog = msg;
                 Debug.WriteLine(msg);
                 Debug.WriteLine($"ERROR: {e.Message} in LOG!!! {logFileName} LOG No RECORD IN FILE!!!");
                 return;
@@ -179,7 +244,7 @@ namespace HW_10_5_WPF_BASICTBOT
                 FileStream stream = File.Create(logFileName);
                 stream.Close();
             }
-
+            msgsLog = msg;
             Debug.WriteLine(msg);
             File.AppendAllText(logFileName, $"{msg}\n");
         }
@@ -193,10 +258,19 @@ namespace HW_10_5_WPF_BASICTBOT
             string req = $"{preRequest}sendMessage?chat_id={chatId}&text={msg}";
             Log($"Ответ {msg}");
             string a;
+            if (client == null) return;
             a = client.DownloadString(req);
             if ((bool)JObject.Parse(a)["ok"])
             {
                 Log("Сообщение доставлено");
+                userMessages.Add(new UserMessage
+                {
+                    ChatId = 0,
+                    Message = msg,
+                    UserName = "BOT",
+                    dateTime = DateTime.Now
+                });
+                SaveAppendFileMessage(userMessages.Last(), usersMessagesFileName);
             }
         }
 

@@ -23,23 +23,21 @@ namespace HW_10_5_WPF_BASICTBOT
     /// </summary>
     public partial class MainWindow : Window
     {
-        BasicTBot bot;
-        public ObservableCollection<UserMessage> userMessages = new ObservableCollection<UserMessage>();
+        public BasicTBot bot;
+        PropWindow propWindow;
 
         public MainWindow()
         {
             InitializeComponent();
-            bot = new BasicTBot();
-            listBox.ItemsSource = userMessages;
-            
-
-
+            bot = new BasicTBot(usersMessagesFileName: Settings.Default["usersMessagesFileNameTB"].ToString()) ;
+            listBox.ItemsSource = bot.userMessages;
+            textLog.DataContext = bot;
+            propWindow = new PropWindow();
         }
 
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            PropWindow propWindow = new PropWindow();
 
             //Debug.WriteLine(Settings.Default["tokenTB"].ToString());
 
@@ -51,15 +49,25 @@ namespace HW_10_5_WPF_BASICTBOT
                 case "start":
                     bot.Start(token: Settings.Default["tokenTB"].ToString() ,
                         logFileName: Settings.Default["logFileNameTB"].ToString(),
-                        usersMessagesFileName: Settings.Default["usersMessagesFileNameTB"].ToString(),
                         mWindow: this
                         );
                     break;
                 case "stop":
                     bot.Stop();
                     break;
+                case "loadMsg":
+                    if (bot.userMessages.Count == 0)
+                    {
+                        ObservableCollection<UserMessage> temp;
+                        if  ( (temp = bot.LoadFileMessage(bot.usersMessagesFileName)) != null)
+                        {
+                            bot.userMessages = temp;
+                            listBox.ItemsSource = bot.userMessages;
+                        };
+                    }
+                    break;
                 case "test":
-                    userMessages.Add(new UserMessage
+                    bot.userMessages.Add(new UserMessage
                     {
                         ChatId = 33356,
                         dateTime = DateTime.Now,
@@ -69,8 +77,24 @@ namespace HW_10_5_WPF_BASICTBOT
                     }) ;
                     break;
                 case "exit":
+                    Close();
                     break;
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (listBox.SelectedItem == null) return;
+            if (String.IsNullOrEmpty(AnsTB.Text)) return;
+            if ((listBox.SelectedItem as UserMessage).ChatId == 0) return;
+            bot.SendMessage(AnsTB.Text, (listBox.SelectedItem as UserMessage).ChatId);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            bot.Stop();
+            propWindow.Close();
+            base.OnClosed(e);
         }
     }
 }

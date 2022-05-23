@@ -5,18 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HW_10_5_WPF_BASICTBOT"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="487" Width="800" MinHeight="480" MinWidth="790">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="23.002"/>
-            <RowDefinition Height="228*" MinHeight="228"/>
-            <RowDefinition Height="55*"/>
-            <RowDefinition Height="43*"/>
-            <RowDefinition Height="51*"/>
-            <RowDefinition Height="34.029"/>
+            <RowDefinition Height="114*" MinHeight="228"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="32.003"/>
+            <RowDefinition Height="19*"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="393*"/>
+            <ColumnDefinition Width="393*" MinWidth="280" MaxWidth="400"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="400*"/>
         </Grid.ColumnDefinitions>
@@ -25,6 +25,7 @@
                 <MenuItem Header="Настройки" x:Name="props" Click="MenuItem_Click"/>
                 <MenuItem Header="Запуск бота" x:Name="start" Click="MenuItem_Click"/>
                 <MenuItem Header="Остановка бота" x:Name="stop" Click="MenuItem_Click"/>
+                <MenuItem Header="Загрузка сообщений с последней сессии" x:Name="loadMsg" Click="MenuItem_Click"/>
                 <MenuItem Header="Тест" x:Name="test" Click="MenuItem_Click"/>
                 <Separator/>
                 <MenuItem Header="Выход" x:Name="exit" Click="MenuItem_Click"/>
@@ -41,19 +42,27 @@
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding Path=dateTime, FallbackValue=24:24:24 200000}" Margin="5,5,0,0" FontSize="11" Foreground="#FF9C8888" />
                         <TextBlock Grid.Row="1" Text="{Binding Path=UserName, FallbackValue=UserName}" Margin="3" FontSize="20" FontWeight="Bold" FontStyle="Normal" Foreground="#FF916464"/>
-                        <TextBlock Grid.Row="2" Text="{Binding Path=Message, FallbackValue=MessageMessage}" TextWrapping="Wrap"  Margin="5"  FontSize="14"/>
+                        <TextBlock Grid.Row="2" Text="{Binding Path=Message, FallbackValue=MessageMessage}" TextWrapping="Wrap"  Margin="5"  FontSize="14" MaxHeight="100"/>
                         <Border Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1" CornerRadius="10,5,20,5"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBlock x:Name="textBlock" Margin="10,5,10,5" Grid.Row="5" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="TextBlock"/>
-        <GroupBox Grid.Column="2" Header="{Binding ElementName=listBox, Path=SelectedItem.UserName, FallbackValue=User Name, StringFormat=СООБЩЕНИЕ ОТ {0}}" Margin="0,23,0,0" Grid.RowSpan="2">
+        <GridSplitter Grid.Column="1" Grid.RowSpan="5" HorizontalAlignment="Stretch"/>
+        <ScrollViewer Grid.Row="4" Grid.ColumnSpan="3" Margin="0,38,0,0" Grid.RowSpan="2" >
+            <TextBox x:Name="textLog" Margin="0,2,0,0" TextWrapping="Wrap" Text="{Binding Path=msgsLog}" FontSize="8"/>
+        </ScrollViewer>
+        <GroupBox Grid.Column="2" Grid.Row="1" Header="{Binding ElementName=listBox, Path=SelectedItem.UserName, FallbackValue=Сообщение от }"  >
             <ScrollViewer>
-                <TextBlock Text="{Binding ElementName=listBox, Path=SelectedItem.Message, FallbackValue=MessageMessage}" TextWrapping="Wrap"  Margin="5"  FontSize="14"/>
+                <TextBlock Text="{Binding ElementName=listBox, Path=SelectedItem.Message, FallbackValue=MessageMessage}" TextWrapping="Wrap"  Margin="5"  FontSize="14" />
             </ScrollViewer>
         </GroupBox>
-
+        <GroupBox Grid.Column="2" Grid.Row="2" Header="Ответ" >
+            <ScrollViewer>
+                <TextBox x:Name="AnsTB" Text="" TextWrapping="Wrap"  Margin="5"  FontSize="14"/>
+            </ScrollViewer>
+        </GroupBox>
+        <Button Grid.Column="2" Grid.Row="3" Content="Отправить сообщение" Click="Button_Click"/>
     </Grid>
 
 </Window>
